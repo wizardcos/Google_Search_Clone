@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-
 import Logo from "../assets/google-logo.png";
 import SearchInput from "./SearchInput";
 import ProfileIcon from "./ProfileIcon";
@@ -9,19 +8,29 @@ import { menu } from "../utils/Constants";
 
 const SearchResultHeader = () => {
   const [selectedMenu, setselectedMenu] = useState("All");
+  const { setImageSearch } = useContext(Context);
+  useEffect(() => {
+    return () => setImageSearch(false);
+  }, []);
+
   const clickHandler = (menuItem) => {
+    let isTypeImage = menuItem.name === "Images";
     setselectedMenu(menuItem.name);
+    setImageSearch(isTypeImage ? true : false);
   };
 
   return (
     <div className="p-[15px] pb-0 md:pl-20 md:pt-7 border-b border-[#ebebeb] flex md:block flex-col items-center sticky top-0 bg-white">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center grow">
-          <img
-            className="hidden md:block w-[92px] mr-10"
-            src={Logo}
-            alt="Google Logo"
-          />
+          <Link to="/">
+            <img
+              className="hidden md:block w-[92px] mr-10"
+              src={Logo}
+              alt="Google Logo"
+            />
+          </Link>
+
           <SearchInput from="searchResult" />
         </div>
         <div className="hidden md:block">
