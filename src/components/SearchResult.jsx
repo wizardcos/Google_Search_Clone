@@ -11,14 +11,16 @@ import { Context } from "../utils/ContextApi";
 const SearchResult = () => {
   const [result, setResult] = useState();
   const { query, startIndex } = useParams();
-  const { imagesearch } = useContext(Context);
+  const { imageSearch } = useContext(Context); // Notice camelCase here
 
   useEffect(() => {
     fetchSearchResult();
-  }, [query, startIndex, imagesearch]);
+  }, [query, startIndex, imageSearch]); // Notice camelCase here
+
   const fetchSearchResult = () => {
     let payload = { q: query, start: startIndex };
-    if (imagesearch) {
+    if (imageSearch) {
+      // Notice camelCase here
       payload.searchType = "image";
     }
     fetchDataFromApi(payload).then((res) => {
@@ -26,7 +28,8 @@ const SearchResult = () => {
       setResult(res);
     });
   };
-  if (!result) return;
+
+  if (!result) return null;
 
   const { items, queries, searchInformation } = result;
   return (
@@ -36,14 +39,14 @@ const SearchResult = () => {
         <div className="flex text-sm text-[#70757a] mb-3">
           {`About ${searchInformation.formattedTotalResults} results in ${searchInformation.formattedSearchTime}`}
         </div>
-        {!imagesearch ? (
+        {!imageSearch ? ( // Notice camelCase here
           <>
             {items.map((item, index) => (
               <SearchedItemTemplate key={index} data={item} />
             ))}
           </>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4">
             {items.map((item, index) => (
               <SearchedImageItemTemplate key={index} data={item} />
             ))}
