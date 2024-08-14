@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-
 import { fetchDataFromApi } from "../utils/api";
 import SearchResultHeader from "./SearchResultHeader";
 import Footer from "./Footer";
@@ -27,11 +26,30 @@ const SearchResult = () => {
       setResult(res);
     });
   };
+  if (!result) return;
 
+  const { items, queries, searchInformation } = result;
   return (
     <div className="flex flex-col min-h-screen">
       <SearchResultHeader />
-      <main className="grow p-[12px] pb-0 md:pl-20"></main>
+      <main className="grow p-[12px] pb-0 md:pl-20">
+        <div className="flex text-sm text-[#70757a] mb-3">
+          {`About ${searchInformation.formattedTotalResults} results in ${searchInformation.formattedSearchTime}`}
+        </div>
+        {!imagesearch ? (
+          <>
+            {items.map((item, index) => (
+              <SearchedItemTemplate key={index} data={item} />
+            ))}
+          </>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
+            {items.map((item, index) => (
+              <SearchedImageItemTemplate key={index} data={item} />
+            ))}
+          </div>
+        )}
+      </main>
       <Footer />
     </div>
   );
