@@ -10,6 +10,24 @@ import Pagination from "./Pagination";
 import { Context } from "../utils/ContextApi";
 
 const SearchResult = () => {
+  const [result, setResult] = useState();
+  const { query, startIndex } = useParams();
+  const { imagesearch } = useContext(Context);
+
+  useEffect(() => {
+    fetchSearchResult();
+  }, [query, startIndex, imagesearch]);
+  const fetchSearchResult = () => {
+    let payload = { q: query, start: startIndex };
+    if (imagesearch) {
+      payload.searchType = "image";
+    }
+    fetchDataFromApi(payload).then((res) => {
+      console.log(res);
+      setResult(res);
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <SearchResultHeader />
